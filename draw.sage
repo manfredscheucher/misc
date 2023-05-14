@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # description: a program for computing iterative tutte layouts of planar graphs
 #              see also http://arxiv.org/abs/1708.06449
-#              (c) Manfred Scheucher 2017
+#              (c) Manfred Scheucher 2017-2023
 
 
 from scipy.spatial import ConvexHull
@@ -101,28 +101,35 @@ def tutte_layout(G,outer_face,weights):
 	return {V[i]:sol[i] for i in range(n)}
 
 
-if len(argv) < 3:
-	print ("usage:")
-	print ("\tsage",argv[0],"inputgraphfile format")
-	print ("""description:
-	the input graphs are in sage format
-	the program then computes a nice visualization and 
-	either creates a png or pdf (if format is given as png or pdf)
-	or a new ipe file with the resulting drawing
-	""")
-	exit()
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("filename",type=str,help="input file")
+parser.add_argument("informat",choices=['list','s6','g6'],help="input file is plain text. each line encodes a graph. lines either encode edge list (python list), sparse6 or graph6 format")
+parser.add_argument("outformat",choices=['png','pdf','ipe'],help="output format is either png, pdf or ipe/xml")
 
-filename = argv[1]
-outformat = argv[2]
-assert(outformat in ['png','pdf','ipe'])
+args = parser.parse_args()
+print("args",args)
+
+
+filename = args.filename
+informat = args.informat
+outformat = args.outformat
+
 
 #G2,outer_vertices = read_graph_from_ipe(filename)
 ct = 0
 drawall = 0
+
 for l in open(filename):
 	ct += 1
-	l = literal_eval(l) 
-	G2 = Graph(l)
+	print("graph#",ct,":",l.replace("\n",""))
+	if args.informat == 'list':
+		G2 = Graph(literal_eval(l))
+	elif args.informat in ['s6','g6']:
+		G2 = Graph(l)
+	else:
+		exit("format not implemented")
+
 	G2.set_pos(G2.layout_planar())
 
 
@@ -195,5 +202,5 @@ for l in open(filename):
 	if outformat == 'ipe':
 		graph_2_ipe(G2,plotfile,colormap)	
 
-	break
-
+	print("wrote visualization to",plotfile)
+	print()
