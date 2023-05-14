@@ -1,0 +1,3 @@
+This repository provides a sagemath script to visualize a planar graph in ipe format. It iteratively computes weighted Tutte embeddings and sets appropriate weights so that faces and edges become "nice". For more information checkout http://arxiv.org/abs/1708.06449 or contact the author (scheucher@math.tu-berlin.de)
+
+Given a plain text file which encodes the edge list of a planar graph, run "sage draw.sage [file] [outputformat]", where possible outputformat are "pdf", "png", or "ipe". The latter is an XML format for the Ipe extensible drawing editor, which can be used to further modify the visualization in a "What You See Is What You Get" style. We refer to the official website https://ipe.otfried.org/
