@@ -1,5 +1,3 @@
-author: Manfred Scheucher, scheucher@math.tu-berlin.de
-
 This repository provides sagemath scripts to visualize planar and plane graphs. 
 
 === draw.sage ===
